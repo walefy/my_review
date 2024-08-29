@@ -706,6 +706,7 @@ name = "my_review"
 version = "0.1.0"
 dependencies = [
  "actix-web",
+ "serde",
 ]
 
 [[package]]
