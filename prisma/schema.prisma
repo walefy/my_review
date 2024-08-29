@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "cargo prisma"
+  output   = "../src/prisma.rs"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         Int          @id @default(autoincrement())
+  email      String       @unique
+  name       String
+  photoUrl   String?
+  Review     Review[]
+  Reviewable Reviewable[]
+}
+
+model Reviewable {
+  id            Int      @id @default(autoincrement())
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  title         String
+  description   String
+  imageUrl      String?
+  referenceLink String?
+  rating        Int      @default(0) @db.UnsignedSmallInt
+  creatorId     Int
+  creator       User     @relation(fields: [creatorId], references: [id])
+  Review        Review[]
+}
+
+model Review {
+  id           Int        @id @default(autoincrement())
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  rating       Int        @db.UnsignedSmallInt
+  comment      String?
+  reviewable   Reviewable @relation(fields: [reviewableId], references: [id])
+  reviewableId Int
+  reviewer     User       @relation(fields: [reviewerId], references: [id])
+  reviewerId   Int
+}

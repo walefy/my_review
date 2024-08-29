@@ -1,0 +1,14 @@
+services:
+  database:
+    image: mysql:8.0.32
+    container_name: database
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=MyReview
+    restart: 'always'
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      timeout: 10s
+      retries: 5
