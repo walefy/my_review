@@ -5,4 +5,11 @@ version = "0.1.0"
 
 [dependencies]
 actix-web = "4"
+prisma-client-rust = {git = "https://github.com/Brendonovich/prisma-client-rust", tag = "0.6.11", default-features = false, features = ["mysql"]}
 serde = {version = "1.0.209", features = ["derive"]}
+
+[workspace]
+members = [
+  "prisma-cli",
+]
+resolver = "2"
