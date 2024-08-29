@@ -1,26 +1,15 @@
-use actix_web::{get, App, HttpResponse, HttpServer, Responder};
+mod controller;
+mod dto;
+mod enums;
+mod model;
+mod service;
 
-#[derive(serde::Serialize)]
-enum HealthStatus {
-    #[serde(rename = "healthy")]
-    Health,
-}
-
-#[derive(serde::Serialize)]
-struct HealthResponse {
-    status: HealthStatus,
-}
-
-#[get("/")]
-async fn health_check() -> impl Responder {
-    HttpResponse::Ok().json(HealthResponse {
-        status: HealthStatus::Health,
-    })
-}
+use actix_web::{App, HttpServer};
+use controller::health_controller;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(health_check))
+    HttpServer::new(|| App::new().service(health_controller::health_check))
         .bind(("localhost", 3001))?
         .run()
         .await
