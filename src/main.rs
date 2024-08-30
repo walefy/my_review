@@ -21,6 +21,12 @@ async fn main() -> std::io::Result<()> {
             .expect("can't connect to database!"),
     );
 
+    #[cfg(debug_assertions)]
+    client._db_push().await.unwrap();
+
+    #[cfg(not(debug_assertions))]
+    client._migrate_deploy();
+
     println!("[server] starting on port 3001");
 
     HttpServer::new(move || {

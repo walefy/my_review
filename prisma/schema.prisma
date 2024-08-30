@@ -16,8 +16,8 @@ model User {
   email      String       @unique
   name       String
   photoUrl   String?
-  Review     Review[]
-  Reviewable Reviewable[]
+  review     Review[]
+  reviewable Reviewable[]
 }
 
 model Reviewable {
@@ -31,7 +31,7 @@ model Reviewable {
   rating        Int      @default(0) @db.UnsignedSmallInt
   creatorId     Int
   creator       User     @relation(fields: [creatorId], references: [id])
-  Review        Review[]
+  review        Review[]
 }
 
 model Review {
