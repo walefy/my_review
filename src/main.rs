@@ -1,6 +1,7 @@
 mod controller;
 mod dto;
 mod enums;
+mod errors;
 mod model;
 #[allow(warnings, unused)]
 mod prisma;
@@ -9,7 +10,7 @@ mod service;
 
 use actix_web::{web, App, HttpServer};
 use prisma::*;
-use routes::health_router::health_router;
+use routes::{health_router, user_controller};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -22,8 +23,13 @@ async fn main() -> std::io::Result<()> {
 
     println!("[server] starting on port 3001");
 
-    HttpServer::new(move || App::new().app_data(client.clone()).service(health_router()))
-        .bind(("localhost", 3001))?
-        .run()
-        .await
+    HttpServer::new(move || {
+        App::new()
+            .app_data(client.clone())
+            .service(health_router())
+            .service(user_controller())
+    })
+    .bind(("localhost", 3001))?
+    .run()
+    .await
 }

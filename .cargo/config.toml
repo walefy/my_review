@@ -1,2 +1,3 @@
 [alias]
+migration = "run -p prisma-cli -- migrate deploy"
 prisma = "run -p prisma-cli --"

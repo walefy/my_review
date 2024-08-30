@@ -1,4 +1,4 @@
-use crate::enums::health_status::HealthStatus;
+use crate::enums::HealthStatus;
 
 #[derive(serde::Serialize)]
 pub struct HealthResponse {
