@@ -20,6 +20,8 @@ async fn main() -> std::io::Result<()> {
             .expect("can't connect to database!"),
     );
 
+    println!("[server] starting on port 3001");
+
     HttpServer::new(move || App::new().app_data(client.clone()).service(health_router()))
         .bind(("localhost", 3001))?
         .run()
