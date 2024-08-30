@@ -2,6 +2,9 @@ FROM rust:1-slim-buster AS build
 
 WORKDIR /app
 
+COPY Cargo.toml /app/
+COPY Cargo.lock /app/
+COPY .cargo /app/.cargo
 COPY . .
 
 RUN apt update && apt install pkg-config libssl-dev -y
