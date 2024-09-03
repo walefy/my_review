@@ -12,12 +12,12 @@ datasource db {
 }
 
 model User {
-  id         Int          @id @default(autoincrement())
-  email      String       @unique
-  name       String
-  photoUrl   String?
-  review     Review[]
-  reviewable Reviewable[]
+  id          Int          @id @default(autoincrement())
+  email       String       @unique
+  name        String
+  photoUrl    String?
+  reviews     Review[]
+  reviewables Reviewable[]
 }
 
 model Reviewable {
@@ -31,7 +31,7 @@ model Reviewable {
   rating        Int      @default(0) @db.UnsignedSmallInt
   creatorId     Int
   creator       User     @relation(fields: [creatorId], references: [id])
-  review        Review[]
+  reviews       Review[]
 }
 
 model Review {
@@ -39,7 +39,7 @@ model Review {
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
   rating       Int        @db.UnsignedSmallInt
-  comment      String?
+  comment      String?    @db.Text
   reviewable   Reviewable @relation(fields: [reviewableId], references: [id])
   reviewableId Int
   reviewer     User       @relation(fields: [reviewerId], references: [id])
