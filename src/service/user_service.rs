@@ -13,8 +13,8 @@ pub async fn create(
     let user_found = user_model::find_user_by_email(user_creation.email.clone(), &client).await;
 
     match user_found {
-        Ok(res) => match res {
-            Some(_) => {
+        Ok(res) => {
+            if res.is_some() {
                 return Err(UserError {
                     status: UserErrorStatus::Conflict,
                     payload: UserErrorPayload {
@@ -22,8 +22,7 @@ pub async fn create(
                     },
                 });
             }
-            None => {}
-        },
+        }
         Err(_) => {
             return Err(UserError {
                 status: UserErrorStatus::BadRequest,

@@ -11,31 +11,31 @@ pub async fn create(
 ) -> Result<user::Data, QueryError> {
     let params: Vec<SetParam> = vec![SetParam::SetPhotoUrl(user_creation.photo_url)];
 
-    Ok(client
+    client
         .user()
         .create(user_creation.email, user_creation.name, params)
         .exec()
-        .await?)
+        .await
 }
 
 pub async fn find_user_by_email(
     email: String,
     client: &Data<PrismaClient>,
 ) -> Result<Option<user::Data>, QueryError> {
-    Ok(client
+    client
         .user()
         .find_unique(user::UniqueWhereParam::EmailEquals(email))
         .exec()
-        .await?)
+        .await
 }
 
 pub async fn find_user_by_id(
     id: i32,
     client: &Data<PrismaClient>,
 ) -> Result<Option<user::Data>, QueryError> {
-    Ok(client
+    client
         .user()
         .find_unique(user::UniqueWhereParam::IdEquals(id))
         .exec()
-        .await?)
+        .await
 }
