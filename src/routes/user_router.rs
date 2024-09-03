@@ -1,4 +1,4 @@
-use actix_web::{web, Resource, Scope};
+use actix_web::{web, Scope};
 
 use crate::controller::user_controller;
 
