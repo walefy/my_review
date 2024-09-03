@@ -28,3 +28,14 @@ pub async fn find_user_by_email(
         .exec()
         .await?)
 }
+
+pub async fn find_user_by_id(
+    id: i32,
+    client: &Data<PrismaClient>,
+) -> Result<Option<user::Data>, QueryError> {
+    Ok(client
+        .user()
+        .find_unique(user::UniqueWhereParam::IdEquals(id))
+        .exec()
+        .await?)
+}

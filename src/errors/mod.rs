@@ -1,4 +1,4 @@
-mod create_user_error;
+mod user_error;
 
-pub use create_user_error::CreateUserError;
-pub use create_user_error::CreateUserErrorPayload;
+pub use user_error::UserError;
+pub use user_error::UserErrorPayload;

@@ -2,6 +2,7 @@ mod controller;
 mod dto;
 mod enums;
 mod errors;
+mod middlewares;
 mod model;
 #[allow(warnings, unused)]
 mod prisma;
@@ -10,7 +11,7 @@ mod service;
 
 use actix_web::{web, App, HttpServer};
 use prisma::*;
-use routes::{health_router, user_controller};
+use routes::{health_router, user_router};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -33,7 +34,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .app_data(client.clone())
             .service(health_router())
-            .service(user_controller())
+            .service(user_router())
     })
     .bind(("localhost", 3001))?
     .run()
