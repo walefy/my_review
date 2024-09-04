@@ -39,3 +39,14 @@ pub async fn find_user_by_id(
         .exec()
         .await
 }
+
+pub async fn delete_user_by_id(
+    id: i32,
+    client: &Data<PrismaClient>,
+) -> Result<user::Data, QueryError> {
+    client
+        .user()
+        .delete(user::UniqueWhereParam::IdEquals(id))
+        .exec()
+        .await
+}

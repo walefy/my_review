@@ -1,9 +1,9 @@
-use crate::enums::UserErrorStatus;
+use crate::enums::HttpStatus;
 use crate::errors::{UserError, UserErrorPayload};
 use crate::prisma::{user, PrismaClient};
 use actix_web::web::Data;
 
-use crate::dto::UserCreation;
+use crate::dto::{ServiceResponse, ServiceResponsePayload, UserCreation};
 use crate::model::user_model;
 
 pub async fn create(
@@ -16,7 +16,7 @@ pub async fn create(
         Ok(res) => {
             if res.is_some() {
                 return Err(UserError {
-                    status: UserErrorStatus::Conflict,
+                    status: HttpStatus::Conflict,
                     payload: UserErrorPayload {
                         message: "user already exists!".to_string(),
                     },
@@ -25,7 +25,7 @@ pub async fn create(
         }
         Err(_) => {
             return Err(UserError {
-                status: UserErrorStatus::BadRequest,
+                status: HttpStatus::BadRequest,
                 payload: UserErrorPayload {
                     message: "can't create user".to_string(),
                 },
@@ -38,7 +38,7 @@ pub async fn create(
     match result {
         Ok(model_response) => Ok(model_response),
         Err(_) => Err(UserError {
-            status: UserErrorStatus::BadRequest,
+            status: HttpStatus::BadRequest,
             // TODO: fazer um mapeamento melhor de qual erro ocorreu
             payload: UserErrorPayload {
                 message: "can't create user".to_string(),
@@ -54,7 +54,7 @@ pub async fn find_user_by_id(client: Data<PrismaClient>, id: i32) -> Result<user
         Ok(user) => {
             if user.is_none() {
                 return Err(UserError {
-                    status: UserErrorStatus::NotFound,
+                    status: HttpStatus::NotFound,
                     payload: UserErrorPayload {
                         message: format!("can't find user with id {id}"),
                     },
@@ -64,9 +64,55 @@ pub async fn find_user_by_id(client: Data<PrismaClient>, id: i32) -> Result<user
             Ok(user.unwrap())
         }
         Err(_) => Err(UserError {
-            status: UserErrorStatus::NotFound,
+            status: HttpStatus::NotFound,
             payload: UserErrorPayload {
                 message: format!("can't find user with id {id}"),
+            },
+        }),
+    }
+}
+
+pub async fn delete_by_id(
+    client: Data<PrismaClient>,
+    id: i32,
+) -> Result<ServiceResponse, UserError> {
+    let user_found = user_model::find_user_by_id(id, &client).await;
+
+    match user_found {
+        Ok(user) => {
+            if user.is_none() {
+                return Err(UserError {
+                    status: HttpStatus::NotFound,
+                    payload: UserErrorPayload {
+                        message: format!("can't find user with id {id}"),
+                    },
+                });
+            }
+        }
+        Err(_) => {
+            return Err(UserError {
+                status: HttpStatus::NotFound,
+                payload: UserErrorPayload {
+                    message: format!("can't find user with id {id}"),
+                },
+            });
+        }
+    }
+
+    let result = user_model::delete_user_by_id(id, &client).await;
+
+    // TODO: migrar todas as funções da service para o modelo ServiceResponse (remover UserError)
+    match result {
+        Ok(_) => Ok(ServiceResponse {
+            status: HttpStatus::NoContent,
+            payload: ServiceResponsePayload {
+                message: "user deleted!".to_string(),
+            },
+        }),
+        Err(_) => Err(UserError {
+            status: HttpStatus::BadRequest,
+            payload: UserErrorPayload {
+                message: "can't delete user!".to_string(),
             },
         }),
     }

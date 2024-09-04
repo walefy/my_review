@@ -1,11 +1,11 @@
 use crate::enums::HttpStatus;
 
 #[derive(serde::Serialize)]
-pub struct UserErrorPayload {
+pub struct ServiceResponsePayload {
     pub message: String,
 }
 
-pub struct UserError {
+pub struct ServiceResponse {
     pub status: HttpStatus,
-    pub payload: UserErrorPayload,
+    pub payload: ServiceResponsePayload,
 }
