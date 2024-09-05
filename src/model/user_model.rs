@@ -1,6 +1,6 @@
 use crate::prisma::*;
 use actix_web::web::Data;
-use prisma_client_rust::QueryError;
+use prisma_client_rust::{raw, QueryError};
 use user::SetParam;
 
 use crate::dto::UserCreation;
@@ -38,6 +38,10 @@ pub async fn find_user_by_id(
         .find_unique(user::UniqueWhereParam::IdEquals(id))
         .exec()
         .await
+}
+
+pub async fn find_all_user(client: &Data<PrismaClient>) -> Result<Vec<user::Data>, QueryError> {
+    client._query_raw(raw!("SELECT * FROM User")).exec().await
 }
 
 pub async fn delete_user_by_id(

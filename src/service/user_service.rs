@@ -47,6 +47,22 @@ pub async fn create(
     }
 }
 
+pub async fn find_all_user(client: Data<PrismaClient>) -> Result<Vec<user::Data>, UserError> {
+    let result = user_model::find_all_user(&client).await;
+
+    match result {
+        Ok(users) => Ok(users),
+        Err(_) => {
+            return Err(UserError {
+                status: HttpStatus::BadRequest,
+                payload: UserErrorPayload {
+                    message: "can't find all users".to_string(),
+                },
+            })
+        }
+    }
+}
+
 pub async fn find_user_by_id(client: Data<PrismaClient>, id: i32) -> Result<user::Data, UserError> {
     let result = user_model::find_user_by_id(id, &client).await;
 

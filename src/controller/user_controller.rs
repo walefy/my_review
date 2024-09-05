@@ -20,6 +20,20 @@ pub async fn create(client: Data<PrismaClient>, body: Json<UserCreation>) -> imp
     }
 }
 
+#[get("")]
+pub async fn find_all_users(client: Data<PrismaClient>) -> impl Responder {
+    let result = user_service::find_all_user(client).await;
+
+    match result {
+        Ok(service_response) => HttpResponse::Ok().json(service_response),
+        Err(service_err) => {
+            let status = service_err.status;
+
+            status.to_response_builder().json(service_err.payload)
+        }
+    }
+}
+
 #[get("/{user_id}")]
 pub async fn find_user_by_id(client: Data<PrismaClient>, user_id: Path<i32>) -> impl Responder {
     let result = user_service::find_user_by_id(client, user_id.into_inner()).await;
