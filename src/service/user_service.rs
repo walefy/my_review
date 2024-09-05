@@ -52,14 +52,12 @@ pub async fn find_all_user(client: Data<PrismaClient>) -> Result<Vec<user::Data>
 
     match result {
         Ok(users) => Ok(users),
-        Err(_) => {
-            return Err(UserError {
-                status: HttpStatus::BadRequest,
-                payload: UserErrorPayload {
-                    message: "can't find all users".to_string(),
-                },
-            })
-        }
+        Err(_) => Err(UserError {
+            status: HttpStatus::BadRequest,
+            payload: UserErrorPayload {
+                message: "can't find all users".to_string(),
+            },
+        }),
     }
 }
 
