@@ -1,0 +1,12 @@
+### Create reviewable
+POST http://localhost:3001/reviewable HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "Reviewable 1",
+  "description": "Description 1",
+  "rating": 5,
+  "image_url": "https://www.test.com",
+  "reference_link": "https://www.test.com",
+  "creator_id": 1
+}

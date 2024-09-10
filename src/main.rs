@@ -11,7 +11,7 @@ mod service;
 
 use actix_web::{web, App, HttpServer};
 use prisma::*;
-use routes::{health_router, user_router};
+use routes::{health_router, reviewable_controller, user_router};
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -35,6 +35,7 @@ async fn main() -> std::io::Result<()> {
             .app_data(client.clone())
             .service(health_router())
             .service(user_router())
+            .service(reviewable_controller())
     })
     .bind(("localhost", 3001))?
     .run()

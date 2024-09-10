@@ -1,15 +1,15 @@
 use actix_web::web::Data;
 
-use crate::dto::ReviewableCreation;
+use crate::dto::{Reviewable, ReviewableCreation};
 use crate::enums::HttpStatus;
 use crate::errors::{ErrorPayload, GenericError};
 use crate::model::reviewable_model;
-use crate::prisma::{reviewable, PrismaClient};
+use crate::prisma::PrismaClient;
 
 pub async fn create(
     reviewable_creation: ReviewableCreation,
     client: Data<PrismaClient>,
-) -> Result<reviewable::Data, GenericError> {
+) -> Result<Reviewable, GenericError> {
     let result = reviewable_model::create(reviewable_creation, &client).await;
 
     match result {
