@@ -1,6 +1,7 @@
 use actix_web::web::Data;
 
-use crate::dto::{Reviewable, ReviewableCreation};
+use crate::dto::ReviewableCreation;
+use crate::entity::Reviewable;
 use crate::enums::HttpStatus;
 use crate::errors::{ErrorPayload, GenericError};
 use crate::model::reviewable_model;

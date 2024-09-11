@@ -1,5 +1,6 @@
 mod controller;
 mod dto;
+mod entity;
 mod enums;
 mod errors;
 mod middlewares;
