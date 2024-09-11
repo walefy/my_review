@@ -65,7 +65,7 @@ pub async fn find_user_by_id(
     client: &Data<PrismaClient>,
     id: i32,
 ) -> Result<user::Data, GenericError> {
-    let result = user_model::find_user_by_id(id, &client).await;
+    let result = user_model::find_user_by_id(id, client).await;
 
     match result {
         Ok(user) => {

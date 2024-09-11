@@ -22,13 +22,9 @@ pub async fn create(
     }
 
     let user_result = user_service::find_user_by_id(&client, reviewable_creation.creator_id).await;
-
-    if let Err(user_err) = user_result {
-        return Err(user_err);
-    }
+    user_result?;
 
     let result = reviewable_model::create(reviewable_creation, &client).await;
-
     match result {
         Ok(model_response) => Ok(model_response),
         Err(_) => Err(GenericError {
