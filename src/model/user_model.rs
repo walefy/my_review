@@ -95,13 +95,12 @@ pub async fn find_all_user(client: &Data<PrismaClient>) -> Result<Vec<User>, Que
     }
 }
 
-pub async fn delete_user_by_id(
-    id: i32,
-    client: &Data<PrismaClient>,
-) -> Result<user::Data, QueryError> {
-    client
+pub async fn delete_user_by_id(id: i32, client: &Data<PrismaClient>) -> Result<(), QueryError> {
+    let _ = client
         .user()
         .delete(user::UniqueWhereParam::IdEquals(id))
         .exec()
-        .await
+        .await;
+
+    Ok(())
 }
