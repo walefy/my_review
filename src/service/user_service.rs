@@ -3,7 +3,7 @@ use crate::errors::{ErrorPayload, GenericError};
 use crate::prisma::{user, PrismaClient};
 use actix_web::web::Data;
 
-use crate::dto::{ServiceResponse, ServiceResponsePayload, UserCreation};
+use crate::dto::UserCreation;
 use crate::model::user_model;
 
 pub async fn create(
@@ -89,10 +89,7 @@ pub async fn find_user_by_id(
     }
 }
 
-pub async fn delete_by_id(
-    client: Data<PrismaClient>,
-    id: i32,
-) -> Result<ServiceResponse, GenericError> {
+pub async fn delete_by_id(client: Data<PrismaClient>, id: i32) -> Result<HttpStatus, GenericError> {
     let user_found = user_model::find_user_by_id(id, &client).await;
 
     match user_found {
@@ -118,12 +115,7 @@ pub async fn delete_by_id(
 
     let result = user_model::delete_user_by_id(id, &client).await;
     match result {
-        Ok(_) => Ok(ServiceResponse {
-            status: HttpStatus::NoContent,
-            payload: ServiceResponsePayload {
-                message: "user deleted!".to_string(),
-            },
-        }),
+        Ok(_) => Ok(HttpStatus::NoContent),
         Err(_) => Err(GenericError {
             status: HttpStatus::BadRequest,
             payload: ErrorPayload {

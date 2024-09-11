@@ -52,13 +52,10 @@ pub async fn delete_user_by_id(client: Data<PrismaClient>, user_id: Path<i32>) -
     let result = user_service::delete_by_id(client, user_id.into_inner()).await;
 
     match result {
-        Ok(service_response) => {
-            let status = service_response.status;
-            status.to_response_builder().json(service_response.payload)
-        }
+        Ok(service_response) => service_response.to_response_builder().finish(),
         Err(service_err) => {
             let status = service_err.status;
-            status.to_response_builder().json(service_err.payload)
+            status.to_response_builder().finish()
         }
     }
 }

@@ -1,6 +1,6 @@
-use serde::{Deserialize, Serialize};
+use serde::Deserialize;
 
-#[derive(Deserialize, Serialize, Clone)]
+#[derive(Deserialize)]
 pub struct ReviewableCreation {
     pub title: String,
     pub description: String,
