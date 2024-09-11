@@ -1,6 +1,7 @@
+use crate::entity::User;
 use crate::enums::HttpStatus;
 use crate::errors::{ErrorPayload, GenericError};
-use crate::prisma::{user, PrismaClient};
+use crate::prisma::PrismaClient;
 use actix_web::web::Data;
 
 use crate::dto::UserCreation;
@@ -9,7 +10,7 @@ use crate::model::user_model;
 pub async fn create(
     user_creation: UserCreation,
     client: Data<PrismaClient>,
-) -> Result<user::Data, GenericError> {
+) -> Result<User, GenericError> {
     let user_found = user_model::find_user_by_email(user_creation.email.clone(), &client).await;
 
     match user_found {
@@ -47,7 +48,7 @@ pub async fn create(
     }
 }
 
-pub async fn find_all_user(client: Data<PrismaClient>) -> Result<Vec<user::Data>, GenericError> {
+pub async fn find_all_user(client: Data<PrismaClient>) -> Result<Vec<User>, GenericError> {
     let result = user_model::find_all_user(&client).await;
 
     match result {
@@ -61,10 +62,7 @@ pub async fn find_all_user(client: Data<PrismaClient>) -> Result<Vec<user::Data>
     }
 }
 
-pub async fn find_user_by_id(
-    client: &Data<PrismaClient>,
-    id: i32,
-) -> Result<user::Data, GenericError> {
+pub async fn find_user_by_id(client: &Data<PrismaClient>, id: i32) -> Result<User, GenericError> {
     let result = user_model::find_user_by_id(id, client).await;
 
     match result {
