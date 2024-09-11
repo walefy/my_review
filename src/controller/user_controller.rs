@@ -36,7 +36,7 @@ pub async fn find_all_users(client: Data<PrismaClient>) -> impl Responder {
 
 #[get("/{user_id}")]
 pub async fn find_user_by_id(client: Data<PrismaClient>, user_id: Path<i32>) -> impl Responder {
-    let result = user_service::find_user_by_id(client, user_id.into_inner()).await;
+    let result = user_service::find_user_by_id(&client, user_id.into_inner()).await;
 
     match result {
         Ok(service_response) => HttpResponse::Ok().json(service_response),

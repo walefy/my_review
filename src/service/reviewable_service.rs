@@ -6,10 +6,27 @@ use crate::errors::{ErrorPayload, GenericError};
 use crate::model::reviewable_model;
 use crate::prisma::PrismaClient;
 
+use super::user_service;
+
 pub async fn create(
     reviewable_creation: ReviewableCreation,
     client: Data<PrismaClient>,
 ) -> Result<Reviewable, GenericError> {
+    if reviewable_creation.rating > 5 {
+        return Err(GenericError {
+            status: HttpStatus::BadRequest,
+            payload: ErrorPayload {
+                message: "the rating cannot be higher than 5.".to_string(),
+            },
+        });
+    }
+
+    let user_result = user_service::find_user_by_id(&client, reviewable_creation.creator_id).await;
+
+    if let Err(user_err) = user_result {
+        return Err(user_err);
+    }
+
     let result = reviewable_model::create(reviewable_creation, &client).await;
 
     match result {
