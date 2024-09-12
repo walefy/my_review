@@ -33,12 +33,31 @@ pub async fn create(
 pub async fn find_user_by_email(
     email: String,
     client: &Data<PrismaClient>,
-) -> Result<Option<user::Data>, QueryError> {
-    client
+) -> Result<Option<User>, QueryError> {
+    let query_result = client
         .user()
         .find_unique(user::UniqueWhereParam::EmailEquals(email))
+        .include(user::include!({ reviews }))
         .exec()
-        .await
+        .await;
+
+    match query_result {
+        Ok(result) => {
+            if result.is_none() {
+                return Ok(None);
+            }
+
+            let result_verified = result.unwrap();
+            Ok(Some(User {
+                id: result_verified.id,
+                email: result_verified.email.to_owned(),
+                name: result_verified.name.to_owned(),
+                photo_url: result_verified.photo_url.to_owned(),
+                reviews: result_verified.reviews.to_owned(),
+            }))
+        }
+        Err(err) => Err(err),
+    }
 }
 
 pub async fn find_user_by_id(
