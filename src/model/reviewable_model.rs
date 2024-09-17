@@ -44,3 +44,31 @@ pub async fn create(
         Err(err) => Err(err),
     }
 }
+
+pub async fn find_all(client: &Data<PrismaClient>) -> Result<Vec<Reviewable>, QueryError> {
+    let result_with_include = client
+        .reviewable()
+        .find_many(vec![])
+        .include(reviewable::include!({ creator reviews }))
+        .exec()
+        .await;
+
+    match result_with_include {
+        Ok(result) => Ok(result
+            .into_iter()
+            .map(|r| Reviewable {
+                id: r.id,
+                title: r.title,
+                description: r.description,
+                rating: r.rating,
+                creator: r.creator,
+                reviews: r.reviews,
+                image_url: r.image_url,
+                reference_link: r.reference_link,
+                created_at: r.created_at,
+                updated_at: r.updated_at,
+            })
+            .collect()),
+        Err(err) => Err(err),
+    }
+}

@@ -101,13 +101,13 @@ pub async fn find_all_user(client: &Data<PrismaClient>) -> Result<Vec<User>, Que
 
     match query_result {
         Ok(result) => Ok(result
-            .iter()
+            .into_iter()
             .map(|user| User {
                 id: user.id,
-                email: user.email.to_owned(),
-                name: user.name.to_owned(),
-                photo_url: user.photo_url.to_owned(),
-                reviews: user.reviews.to_owned(),
+                email: user.email,
+                name: user.name,
+                photo_url: user.photo_url,
+                reviews: user.reviews,
             })
             .collect()),
         Err(err) => Err(err),
