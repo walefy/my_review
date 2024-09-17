@@ -36,3 +36,17 @@ pub async fn create(
         }),
     }
 }
+
+pub async fn find_all(client: Data<PrismaClient>) -> Result<Vec<Reviewable>, GenericError> {
+    let result = reviewable_model::find_all(&client).await;
+
+    match result {
+        Ok(model_response) => Ok(model_response),
+        Err(_) => Err(GenericError {
+            status: HttpStatus::InternalServerError,
+            payload: ErrorPayload {
+                message: "can't find all reviewable".to_string(),
+            },
+        }),
+    }
+}

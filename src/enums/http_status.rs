@@ -5,6 +5,7 @@ pub enum HttpStatus {
     Conflict,
     NotFound,
     NoContent,
+    InternalServerError,
 }
 
 impl HttpStatus {
@@ -14,6 +15,7 @@ impl HttpStatus {
             HttpStatus::Conflict => HttpResponse::Conflict(),
             HttpStatus::NotFound => HttpResponse::NotFound(),
             HttpStatus::NoContent => HttpResponse::NoContent(),
+            HttpStatus::InternalServerError => HttpResponse::InternalServerError(),
         }
     }
 }
