@@ -36,3 +36,7 @@ Content-Type: application/json
   "reference_link": "https://www.test.com",
   "creator_id": 9999
 }
+
+### Get reviewable
+GET http://localhost:3001/reviewable HTTP/1.1
+Content-Type: application/json
